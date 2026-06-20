@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -26,7 +26,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Inter", Arial, sans-serif;
+  font-family: "DM Sans", Arial, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -65,12 +65,6 @@ a {
   background-size: 42px 42px;
 }
 
-.ambient-loading {
-  background: linear-gradient(110deg, #ebe7de 8%, #f8f5ef 18%, #e7eee9 33%);
-  background-size: 200% 100%;
-  animation: ambient-shimmer 1.8s ease-in-out infinite;
-}
-
 .premium-spotlight {
   --spotlight-x: 50%;
   --spotlight-y: 50%;
@@ -103,54 +97,6 @@ a {
 .premium-spotlight:hover::before,
 .premium-spotlight:focus-within::before {
   opacity: 1;
-}
-
-.premium-spotlight-dark::before {
-  background: radial-gradient(
-    420px circle at var(--spotlight-x) var(--spotlight-y),
-    rgba(255, 255, 255, 0.18),
-    rgba(100, 220, 255, 0.12) 34%,
-    transparent 64%
-  );
-}
-
-@keyframes ambient-shimmer {
-  0% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: -100% 0;
-  }
-}
-
-.typewriter-text {
-  display: inline-block;
-  max-width: max-content;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 0.08em solid currentColor;
-  animation:
-    typewriter-reveal 1.05s steps(22, end) both,
-    typewriter-caret 0.8s step-end infinite;
-}
-
-@keyframes typewriter-reveal {
-  from {
-    max-width: 0;
-  }
-  to {
-    max-width: 100%;
-  }
-}
-
-@keyframes typewriter-caret {
-  0%,
-  100% {
-    border-color: transparent;
-  }
-  50% {
-    border-color: currentColor;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

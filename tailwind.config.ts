@@ -25,9 +25,9 @@ const config: Config = {
         midnight: "#0D1621",
       },
       fontFamily: {
-        sans: ["Inter", "Arial", "sans-serif"],
-        heading: ["Inter", "Arial", "sans-serif"],
-        editorial: ["Newsreader", "Georgia", "serif"],
+        sans: ["Plus Jakarta Sans", "Arial", "sans-serif"],
+        heading: ["Plus Jakarta Sans", "Arial", "sans-serif"],
+        editorial: ["DM Sans", "Arial", "sans-serif"],
       },
       boxShadow: {
         soft: "0 24px 80px rgba(17, 24, 39, 0.12)",
