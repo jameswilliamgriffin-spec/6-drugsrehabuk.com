@@ -18,7 +18,6 @@ import {
   Brain,
   CalendarDays,
   Check,
-  ChevronRight,
   Clock3,
   ExternalLink,
   Facebook,
@@ -32,7 +31,6 @@ import {
   Phone,
   Pill,
   ShieldCheck,
-  Sparkles,
   Star,
   Stethoscope,
   TriangleAlert,
@@ -94,23 +92,22 @@ const heroImages = [
   },
 ];
 
-const heroProofs = [
+const heroTrustSignals = [
   {
-    title: "Medically informed",
-    text: "Withdrawal from drugs is assessed carefully, with clinical support and appropriate supervision throughout.",
+    title: "Private residential care",
+    icon: BedDouble,
+  },
+  {
+    title: "Medically supported detox",
     icon: Stethoscope,
   },
   {
-    title: "Residential support",
-    text: "A calm, structured environment away from substances, familiar pressures and everyday triggers.",
-    icon: Home,
-  },
-  {
-    title: "Confidential",
-    text: "Private conversations, clear guidance and treatment shaped around the person behind the addiction.",
-    icon: Sparkles,
+    title: "Confidential admissions",
+    icon: LockKeyhole,
   },
 ];
+
+const heroPathSteps = ["Call", "Assessment", "Admission"];
 
 const substanceClusters = [
   {
@@ -715,20 +712,12 @@ export function WellbourneMicrosite() {
   );
   const heroPointerX = useMotionValue(0);
   const heroPointerY = useMotionValue(0);
-  const heroRotateX = useSpring(
-    useTransform(heroPointerY, [-1, 1], shouldReduceMotion ? [0, 0] : [2.2, -2.2]),
-    { stiffness: 140, damping: 22 },
-  );
-  const heroRotateY = useSpring(
-    useTransform(heroPointerX, [-1, 1], shouldReduceMotion ? [0, 0] : [-2.8, 2.8]),
-    { stiffness: 140, damping: 22 },
-  );
   const heroImageX = useSpring(
-    useTransform(heroPointerX, [-1, 1], shouldReduceMotion ? [0, 0] : [-10, 10]),
+    useTransform(heroPointerX, [-1, 1], shouldReduceMotion ? [0, 0] : [-16, 16]),
     { stiffness: 120, damping: 24 },
   );
   const heroImageY = useSpring(
-    useTransform(heroPointerY, [-1, 1], shouldReduceMotion ? [0, 0] : [-8, 8]),
+    useTransform(heroPointerY, [-1, 1], shouldReduceMotion ? [0, 0] : [-12, 12]),
     { stiffness: 120, damping: 24 },
   );
 
@@ -848,136 +837,200 @@ export function WellbourneMicrosite() {
       </motion.header>
 
       {/* ── Hero ────────────────────────────────────────────── */}
-      <section id="top" className="relative px-5 pb-20 pt-32 md:px-8 md:pb-28 lg:min-h-[900px] lg:pt-36">
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="soft-grid absolute inset-x-0 top-0 h-[720px] opacity-50" />
-          <div className="absolute left-1/2 top-20 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
-        </div>
-        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
+      <section
+        id="top"
+        className="relative isolate overflow-hidden px-5 pb-16 pt-28 text-white md:px-8 md:pb-20 md:pt-32"
+        onPointerMove={handleHeroPointerMove}
+        onPointerLeave={resetHeroPointer}
+      >
+        <div className="absolute inset-0 z-0 bg-midnight">
+          {heroImages.map((image, index) => (
+            <motion.div
+              key={image.src}
+              initial={false}
+              animate={{
+                opacity: activeHeroImage === index ? 1 : 0,
+                scale: activeHeroImage === index ? 1.04 : 1.1,
+              }}
+              transition={{ duration: 1.2, ease: smoothEase }}
+              className="absolute inset-0"
+              style={{ x: heroImageX, y: heroImageY }}
+            >
+              <Image
+                src={image.src}
+                alt=""
+                fill
+                className="object-cover opacity-72"
+                sizes="100vw"
+                priority={index === 0}
+              />
+            </motion.div>
+          ))}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,22,33,0.76)_0%,rgba(13,22,33,0.58)_46%,rgba(13,22,33,0.9)_100%)]" />
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            aria-hidden="true"
+            animate={shouldReduceMotion ? undefined : { x: ["-8%", "8%", "-8%"] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute left-[-12%] top-24 h-64 w-2/3 rounded-full bg-brand/20 blur-3xl"
+          />
+          <motion.div
+            aria-hidden="true"
+            animate={shouldReduceMotion ? undefined : { x: ["8%", "-8%", "8%"] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[-8rem] right-[-8%] h-72 w-3/5 rounded-full bg-sage/20 blur-3xl"
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, ease: smoothEase }}
+            transition={{ duration: 0.82, ease: smoothEase }}
+            className="max-w-5xl pt-8 md:pt-12"
           >
-            <SectionLabel>Private UK care • Linked to The Wellbourne Clinic</SectionLabel>
-            <h1 className="max-w-5xl text-balance break-words font-heading text-[2.75rem] font-semibold leading-[1] tracking-[-0.052em] text-graphite sm:text-[3.45rem] md:text-[5.35rem] md:leading-[0.98] md:tracking-[-0.06em]">
-              Drug Rehab and Detox in the UK.
-            </h1>
-            <p className="mt-7 max-w-2xl text-pretty text-xl leading-9 text-muted">
-              Clear, responsible guidance on drug addiction treatment, medically assisted detox and
-              residential drug rehab — plus confidential access to The Wellbourne Clinic when you
-              are ready to talk.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button type="button" onClick={openLiveChat}>
-                Talk confidentially <MessageCircle className="h-5 w-5" />
-              </Button>
-              <Button asChild variant="secondary">
-                <a href="#substances">
-                  Common substances we treat <ChevronRight className="h-5 w-5" />
-                </a>
-              </Button>
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/22 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/82 backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+              Private UK care linked to The Wellbourne Clinic
             </div>
-            <dl className="mt-12 grid max-w-3xl gap-3 sm:grid-cols-3">
-              {heroProofs.map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-2xl border border-white/80 bg-white/60 p-5 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-card"
-                >
-                  <item.icon className="mb-5 h-5 w-5 text-brand" />
-                  <dt className="text-xl font-semibold tracking-[-0.03em]">{item.title}</dt>
-                  <dd className="mt-2 text-sm leading-6 text-muted">{item.text}</dd>
-                </div>
-              ))}
-            </dl>
+            <h1 className="mt-7 max-w-5xl text-balance break-words font-heading text-[3.05rem] font-semibold leading-[0.96] tracking-[-0.045em] text-white sm:text-[4.15rem] md:text-[6.4rem] lg:text-[7.1rem]">
+              A calmer first step into drug rehab and detox.
+            </h1>
+            <motion.div
+              aria-hidden="true"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1.1, delay: 0.35, ease: smoothEase }}
+              className="mt-6 h-px w-full max-w-2xl origin-left bg-gradient-to-r from-brand via-white/50 to-transparent"
+            />
+            <p className="mt-7 max-w-3xl text-pretty text-lg leading-8 text-white/78 md:text-xl md:leading-9">
+              When substance use has become hard to contain, clear guidance matters. We help you
+              understand safe detox, residential treatment and the private admissions route into a
+              setting where you can pause, be heard and begin again.
+            </p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.97, y: 24 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.12, ease: smoothEase }}
-            className="relative"
-            style={{ perspective: 1200 }}
-            onPointerMove={handleHeroPointerMove}
-            onPointerLeave={resetHeroPointer}
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.82, delay: 0.12, ease: smoothEase }}
+            className="mt-9 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
           >
-            <div className="absolute -left-4 top-12 z-10 hidden rounded-2xl border border-white/70 bg-white/80 p-4 shadow-card backdrop-blur md:block">
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-soft text-brand-ink">
-                  <ShieldCheck className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Enquiries</p>
-                  <p className="text-sm font-semibold">Handled privately</p>
-                </div>
+            <div>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button type="button" onClick={openLiveChat} className="bg-white text-graphite hover:bg-brand hover:text-white">
+                  Start a private conversation <MessageCircle className="h-5 w-5" />
+                </Button>
+                <Button asChild variant="secondary" className="border-white/20 bg-white/10 text-white hover:border-white/45 hover:bg-white/18">
+                  <a href={phoneHref}>
+                    Call {phoneNumber} <Phone className="h-5 w-5" />
+                  </a>
+                </Button>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {heroTrustSignals.map((item) => (
+                  <span
+                    key={item.title}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/18 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white/86 backdrop-blur transition hover:border-white/36 hover:bg-white/16"
+                  >
+                    <item.icon className="h-4 w-4 text-brand" />
+                    {item.title}
+                  </span>
+                ))}
               </div>
             </div>
+
             <motion.div
-              className="relative aspect-[4/4.65] overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-soft md:aspect-[4/4.4]"
-              style={{ rotateX: heroRotateX, rotateY: heroRotateY, transformStyle: "preserve-3d" }}
+              animate={shouldReduceMotion ? undefined : { y: [0, -8, 0] }}
+              transition={{ duration: 5.4, repeat: Infinity, ease: "easeInOut" }}
+              className="max-w-sm rounded-3xl border border-white/18 bg-white/12 p-5 shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-xl"
             >
-              {heroImages.map((image, index) => (
-                <motion.div
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand">A quiet reassurance</p>
+              <p className="mt-3 text-lg font-semibold leading-7 text-white">
+                &ldquo;You do not need the perfect words before you ask for help.&rdquo;
+              </p>
+              <p className="mt-3 text-sm leading-6 text-white/68">
+                A private conversation can simply clarify what is safe, suitable and possible.
+              </p>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.24, ease: smoothEase }}
+            className="mt-12 grid gap-4 lg:grid-cols-[1fr_0.72fr]"
+          >
+            <div className="grid gap-4 sm:grid-cols-3">
+              {heroImages.slice(0, 3).map((image, index) => (
+                <motion.button
                   key={image.src}
-                  initial={false}
-                  animate={{ opacity: activeHeroImage === index ? 1 : 0, scale: activeHeroImage === index ? 1 : 1.035 }}
-                  transition={{ duration: 0.9, ease: smoothEase }}
-                  className="absolute inset-0"
-                  style={{ x: heroImageX, y: heroImageY }}
+                  type="button"
+                  onClick={() => setActiveHeroImage(index)}
+                  whileHover={shouldReduceMotion ? undefined : { y: -6 }}
+                  className={`group relative min-h-[220px] overflow-hidden border text-left shadow-editorial transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-midnight sm:min-h-[280px] ${
+                    index === 1
+                      ? "rounded-t-[5rem] rounded-b-[1.5rem] lg:translate-y-8"
+                      : "rounded-[1.5rem]"
+                  } ${activeHeroImage === index ? "border-brand/80" : "border-white/18"}`}
                 >
                   <Image
                     src={image.src}
                     alt={image.alt}
                     fill
-                    className="object-cover"
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                    priority={index === 0}
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                    sizes="(min-width: 1024px) 26vw, (min-width: 640px) 33vw, 100vw"
                   />
-                </motion.div>
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,22,33,0.02)_20%,rgba(13,22,33,0.76)_100%)]" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/65">
+                      {image.label}
+                    </p>
+                    <p className="mt-2 text-lg font-semibold leading-6 text-white">
+                      {image.caption}
+                    </p>
+                  </div>
+                </motion.button>
               ))}
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,24,39,0)_42%,rgba(17,24,39,0.72)_100%)]" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white md:p-8">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
-                  {heroImages[activeHeroImage].label}
-                </p>
-                <p className="mt-2 max-w-md text-3xl font-semibold leading-tight tracking-[-0.04em]">
-                  {heroImages[activeHeroImage].caption}
-                </p>
-                <div className="mt-6 flex gap-2">
-                  {heroImages.map((image, index) => (
-                    <button
-                      key={image.src}
-                      type="button"
-                      aria-label={`Show ${image.label}`}
-                      onClick={() => setActiveHeroImage(index)}
-                      className={`h-2 rounded-full transition-all ${
-                        activeHeroImage === index ? "w-8 bg-white" : "w-2 bg-white/45 hover:bg-white/70"
-                      }`}
-                    />
-                  ))}
+            </div>
+
+            <div className="rounded-[1.75rem] border border-white/18 bg-white/90 p-5 text-graphite shadow-editorial backdrop-blur md:p-6 lg:mt-14">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted">
+                    First step pathway
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
+                    A discreet route into care
+                  </h2>
                 </div>
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand-ink">
+                  <ShieldCheck className="h-5 w-5" />
+                </span>
               </div>
-            </motion.div>
-            <motion.div
-              animate={shouldReduceMotion ? undefined : { y: [0, -9, 0] }}
-              transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-6 right-5 min-w-[214px] rounded-3xl border border-white bg-white p-6 shadow-[0_28px_80px_rgba(17,24,39,0.24)] ring-1 ring-graphite/10"
-            >
-              <div className="flex w-full items-center justify-between text-[#F19885]" aria-hidden="true">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-6 w-6 fill-current" />
+              <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                {heroPathSteps.map((step, index) => (
+                  <div key={step} className="group flex items-center gap-4 rounded-2xl bg-cream p-4 transition hover:bg-white hover:shadow-card">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-sm font-bold text-brand shadow-sm">
+                      0{index + 1}
+                    </span>
+                    <div>
+                      <p className="font-semibold">{step}</p>
+                      <p className="mt-1 text-sm leading-6 text-muted">
+                        {index === 0 && "Speak privately with someone who will listen."}
+                        {index === 1 && "Clarify risks, needs and the right level of support."}
+                        {index === 2 && "Plan a calm, confidential arrival when treatment is right."}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
-              <p className="mt-4 text-base font-extrabold tracking-[-0.02em] text-[#111827]">
-                5-star Google reviews
-              </p>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* ── Phone CTA strip ─────────────────────────────────── */}
-      <section className="px-5 pb-16 md:px-8 md:pb-24">
+      <section className="px-5 pb-16 pt-14 md:px-8 md:pb-24 md:pt-20">
         <motion.p
           {...fadeIn}
           className="mx-auto max-w-5xl text-center text-2xl font-semibold leading-tight tracking-[-0.035em] text-graphite md:text-4xl"
